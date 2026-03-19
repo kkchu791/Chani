@@ -1,12 +1,15 @@
-import promptSync from 'prompt-sync';
-const prompt = promptSync();
+import psp from "prompt-sync-plus";
+// import promptSync from 'prompt-sync';
+// const prompt = promptSync();
+const prompt = psp();
+
 import {
   getChaniFinalContext,
   memoryExtractionContext,
   getExtractionRequest,
 } from '../chaniContext.js';
 import { sendMessageToGroq } from '../apis/groq.js';
-import { writeMemoriesToStorage } from '../apis/db.js';
+import { updateMemories } from "../apis/dynamodb.js";
 
 export async function startChat() {
     let openConnection = true;
@@ -71,12 +74,10 @@ async function updateMemory(usersMessage, chanisMessage) {
   
 
   const resp = await sendMessageToGroq(messages);
-  const chaniResp = resp.choices[0]?.message?.content || "";
-
-  // clean response
+  const chanisChoiceMemories = resp.choices[0]?.message?.content || "";
 
   // api call to write to the storage
-  await writeMemoriesToStorage(chaniResp);
+  await updateMemories(chanisChoiceMemories);
 }
 
 function goOffline() {
