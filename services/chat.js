@@ -5,11 +5,15 @@ const prompt = psp();
 
 import {
   getChaniFinalContext,
-  memoryExtractionContext,
+  memoryExtractionDirections,
   getExtractionRequest,
 } from '../chaniContext.js';
 import { sendMessageToGroq } from '../apis/groq.js';
 import { updateMemories } from "../apis/dynamodb.js";
+import {
+  executeAction,
+  ourTracksTools,
+ } from "../tools.js";
 
 export async function startChat() {
     let openConnection = true;
@@ -37,9 +41,20 @@ export async function startChat() {
           }
         ];
 
-        const resp = await sendMessageToGroq(messages);
+        const isScheduling = userInput.includes("block");
+
+        const resp = isScheduling ? 
+          await sendMessageToGroq(messages, ourTracksTools) : 
+          await sendMessageToGroq(messages);
+
         const chaniResp = resp.choices[0]?.message?.content || "";
-        
+        const chaniAction = resp.choices[0]?.message?.tool_calls?.[0];
+
+        if (chaniAction) {
+          console.log("chani executing action...")
+          await executeAction(chaniAction);
+        }
+
         console.log(`Chani: ${chaniResp}`);
 
         messages = [...messages,
@@ -64,7 +79,7 @@ async function updateMemory(usersMessage, chanisMessage) {
   let messages = [
     {
       role: "system",
-      content: memoryExtractionContext
+      content: memoryExtractionDirections
     },
     {
       role: "user",

@@ -20,8 +20,8 @@ export async function getMemories() {
 }
 
 export async function updateMemories(chanisChoiceMemories) {
-    console.log(typeof JSON.parse(chanisChoiceMemories), 'typeof');
-    console.log({...JSON.parse(chanisChoiceMemories)}, 'chanisChoiceMemories')
+    // console.log(typeof JSON.parse(chanisChoiceMemories), 'typeof');
+    // console.log({...JSON.parse(chanisChoiceMemories)}, 'chanisChoiceMemories')
     const command = new PutCommand({
         TableName: "chani-memories",
         Item: { userId: "kirk", ...JSON.parse(chanisChoiceMemories) }
