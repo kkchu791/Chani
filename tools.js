@@ -1,3 +1,4 @@
+import { exec } from 'child_process'
 
 // tool definition (json schema that tells groq what exists)
 export const ourTracksTools = [
@@ -29,10 +30,38 @@ export const ourTracksTools = [
         "required": ["date", "time_block_id", "task", "goal_id"]
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "play_music",
+      "description": "Play a Spotify playlist based on the user's mood",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "mood": {
+            "type": "string",
+            "enum": ["sexy", "uplifting"],
+            "description": "The mood or vibe for the music"
+          }
+        },
+        "required": ["mood"]
+      }
+    }
   }
 ];
 
 // tool implementation (the actual functions that run when groq calls them)
+
+const playlists = {
+  sexy: "spotify:playlist:1A0xX0LG7GjeRAQCejzQ2m",
+  uplifting: "spotify:playlist:3v0Gktg81CesgszFuvsqMZ"
+}
+async function playMusic({ mood }) {
+  const uri = playlists[mood];
+  if (!uri) return;
+  exec(`osascript -e 'tell application "Spotify" to play track "${uri}"'`);
+}
 
 async function createBlock({
   date,
@@ -66,6 +95,7 @@ async function createBlock({
 
 const availableFunctions = {
   create_block: createBlock,
+  play_music: playMusic
 };
 
 export function executeAction(toolCall) {

@@ -42,8 +42,9 @@ export async function startChat() {
         ];
 
         const isScheduling = userInput.includes("block");
+        const isMoody = userInput.includes("play")
 
-        const resp = isScheduling ? 
+        const resp = (isScheduling || isMoody) ? 
           await sendMessageToGroq(messages, ourTracksTools) : 
           await sendMessageToGroq(messages);
 
