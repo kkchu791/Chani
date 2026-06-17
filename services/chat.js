@@ -10,6 +10,7 @@ import {
 } from '../context/chaniContext.js';
 import { sendMessageToGroq } from '../apis/groq.js';
 import { updateMemories } from "../apis/dynamodb.js";
+import { writeMemoriesToStorage } from "../apis/db.js";
 import {
   executeAction,
   ourTracksTools,
@@ -91,8 +92,11 @@ async function updateMemory(usersMessage, chanisMessage) {
 
   const resp = await sendMessageToGroq(messages);
   const chanisChoiceMemories = resp.choices[0]?.message?.content || "";
+  
+  //api call to write to in-memory storage
+  await writeMemoriesToStorage(chanisChoiceMemories)
 
-  // api call to write to the storage
+  // api call to write to AWS DynamoDB cloud storage
   await updateMemories(chanisChoiceMemories);
 }
 
