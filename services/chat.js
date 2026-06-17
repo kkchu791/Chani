@@ -7,7 +7,7 @@ import {
   getChaniFinalContext,
   memoryExtractionDirections,
   getExtractionRequest,
-} from '../chaniContext.js';
+} from '../context/chaniContext.js';
 import { sendMessageToGroq } from '../apis/groq.js';
 import { updateMemories } from "../apis/dynamodb.js";
 import {

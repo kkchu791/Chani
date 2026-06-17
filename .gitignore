@@ -3,4 +3,6 @@ memory.json
 original_memory.json
 node_modules
 migrate.js
-weekly_plans
+context/weeklyPlans
+context/fitness.js
+context/chaniBackground.js
