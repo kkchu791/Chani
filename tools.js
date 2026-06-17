@@ -41,7 +41,7 @@ export const ourTracksTools = [
         "properties": {
           "mood": {
             "type": "string",
-            "enum": ["sexy", "uplifting"],
+            "enum": ["sexy", "uplifting", "enya", "endOfDay", "drama"],
             "description": "The mood or vibe for the music"
           }
         },
@@ -55,8 +55,12 @@ export const ourTracksTools = [
 
 const playlists = {
   sexy: "spotify:playlist:1A0xX0LG7GjeRAQCejzQ2m",
-  uplifting: "spotify:playlist:3v0Gktg81CesgszFuvsqMZ"
+  uplifting: "spotify:playlist:3v0Gktg81CesgszFuvsqMZ",
+  endOfDay: "spotify:playlist:5Q8c6iENFWOJ66QqCuan7U",
+  enya: "spotify:track:6FLwmdmW77N1Pxb1aWsZmO",
+  drama: "spotify:track:31WVvzP9taCDpfN8UfbFqt"
 }
+
 async function playMusic({ mood }) {
   const uri = playlists[mood];
   if (!uri) return;
