@@ -1,5 +1,5 @@
 # Chani
-Job search assistant to help navigate the ways of the desert.
+Personal chat app to reflect.
 
 Run on root:
 $ node --env-file=.env app.js
