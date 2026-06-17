@@ -30,7 +30,7 @@ export async function startChat() {
     while (openConnection) {
       const userInput = prompt("You: ");
 
-        if (userInput.toLowerCase() === "exit") {
+        if (userInput.toLowerCase() === "exit" || userInput.toLowerCase() === "exit game") {
             openConnection = false;
             break;
         }
