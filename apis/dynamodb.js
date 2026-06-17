@@ -19,13 +19,39 @@ export async function getMemories() {
     return response.Item;
 }
 
+// export async function updateMemories(chanisChoiceMemories) {
+//     // console.log(typeof JSON.parse(chanisChoiceMemories), 'typeof');
+//     // console.log({...JSON.parse(chanisChoiceMemories)}, 'chanisChoiceMemories')
+//     const command = new PutCommand({
+//         TableName: "chani-memories",
+//         Item: { userId: "kirk", ...JSON.parse(chanisChoiceMemories) }
+//     });
+//     await documentClient.send(command);
+// }
+
 export async function updateMemories(chanisChoiceMemories) {
-    // console.log(typeof JSON.parse(chanisChoiceMemories), 'typeof');
-    // console.log({...JSON.parse(chanisChoiceMemories)}, 'chanisChoiceMemories')
+    let parsed;
+    
+    try {
+        // Strip markdown code fences if present
+        const cleaned = chanisChoiceMemories
+            .replace(/^```json\s*/i, '')
+            .replace(/^```\s*/i, '')
+            .replace(/```\s*$/i, '')
+            .trim();
+        
+        parsed = JSON.parse(cleaned);
+    } catch (e) {
+        console.error('Failed to parse memories JSON:', e.message);
+        console.error('Raw input:', chanisChoiceMemories.slice(0, 200)); // log first 200 chars for debugging
+        return; // bail out instead of crashing
+    }
+
     const command = new PutCommand({
         TableName: "chani-memories",
-        Item: { userId: "kirk", ...JSON.parse(chanisChoiceMemories) }
+        Item: { userId: "kirk", ...parsed }
     });
+    
     await documentClient.send(command);
 }
 
