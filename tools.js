@@ -41,7 +41,7 @@ export const ourTracksTools = [
         "properties": {
           "mood": {
             "type": "string",
-            "enum": ["sexy", "uplifting", "enya", "endOfDay", "drama"],
+            "enum": ["sexy", "uplifting", "enya", "endOfDay", "drama", "ironman", "drake"],
             "description": "The mood or vibe for the music"
           }
         },
@@ -58,10 +58,13 @@ const playlists = {
   uplifting: "spotify:playlist:3v0Gktg81CesgszFuvsqMZ",
   endOfDay: "spotify:playlist:5Q8c6iENFWOJ66QqCuan7U",
   enya: "spotify:track:6FLwmdmW77N1Pxb1aWsZmO",
-  drama: "spotify:track:31WVvzP9taCDpfN8UfbFqt"
+  drama: "spotify:track:31WVvzP9taCDpfN8UfbFqt",
+  ironman: "spotify:track:39shmbIHICJ2Wxnk1fPSdz",
+  drake: "spotify:track:514joG57v4yKTsfQmz7stz"
 }
 
 async function playMusic({ mood }) {
+  console.log(mood, 'mood')
   const uri = playlists[mood];
   if (!uri) return;
   exec(`osascript -e 'tell application "Spotify" to play track "${uri}"'`);

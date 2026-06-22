@@ -43,7 +43,8 @@ export async function startChat() {
         ];
 
         const isScheduling = userInput.includes("block");
-        const isMoody = userInput.includes("play")
+        const isMoody = userInput.includes("play") || 
+                        userInput.toLowerCase().includes("jarvis")
 
         const resp = (isScheduling || isMoody) ? 
           await sendMessageToGroq(messages, ourTracksTools) : 
@@ -52,6 +53,7 @@ export async function startChat() {
         const chaniResp = resp.choices[0]?.message?.content || "";
         const chaniAction = resp.choices[0]?.message?.tool_calls?.[0];
 
+        console.log(chaniAction, 'chaniAction')
         if (chaniAction) {
           console.log("chani executing action...")
           await executeAction(chaniAction);
